@@ -5,14 +5,14 @@
 - [x] SBox
 - [ ] SubBytes
 - [ ] ShiftRows
-- [ ] ShiftColumns
+- [ ] MixColumns
 
 ## Decryption
 
 - [x] InvSBox
 - [ ] InvSubBytes
 - [ ] InvShiftRows
-- [ ] InvShiftColumns
+- [ ] InvMixColumns
 
 ## Common
 
