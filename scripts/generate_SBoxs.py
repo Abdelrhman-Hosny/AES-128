@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 subbyte_dict = {}
 hexa_dict = {
     0: '0', 1: '1', 2: '2', 3: '3',
@@ -17,11 +19,17 @@ file_lines.append("module SBox(input [7:0] input_byte, output reg[7:0] output_by
 file_lines.append("always @(input_byte) begin\n")
 file_lines.append("case(input_byte)\n")
 
+inv_file_lines = deepcopy(file_lines)
 
 for k, v in subbyte_dict.items():
     file_lines.append(f"8'h{k}: output_byte = 8'h{v};\n")
+    inv_file_lines.append(f"8'h{v}: output_byte = 8'h{k};\n")
 
 file_lines.append("endcase\nend\nendmodule")
+inv_file_lines.append("endcase\nend\nendmodule")
 
-with open('./src/SBox.v', 'w') as f:
+with open('./src/encrypt/SBox.v', 'w') as f:
     f.writelines(file_lines)
+
+with open('./src/decrypt/InvSBox.v', 'w') as f:
+    f.writelines(inv_file_lines)
