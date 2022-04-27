@@ -1,5 +1,4 @@
 module SBox(input [7:0] input_byte, output reg[7:0] output_byte);
-
 always @(input_byte) begin
 case(input_byte)
 8'h00: output_byte = 8'h63;
@@ -258,9 +257,6 @@ case(input_byte)
 8'hFD: output_byte = 8'h54;
 8'hFE: output_byte = 8'hbb;
 8'hFF: output_byte = 8'h16;
-
 endcase
-
 end
-
 endmodule
