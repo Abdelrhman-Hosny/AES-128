@@ -1,4 +1,4 @@
-module SBox(input [7:0] input_byte, output reg[7:0] output_byte);
+module InvSBox(input [7:0] input_byte, output reg[7:0] output_byte);
 always @(input_byte) begin
 case(input_byte)
 8'h63: output_byte = 8'h00;
