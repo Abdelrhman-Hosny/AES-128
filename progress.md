@@ -3,14 +3,14 @@
 ## Encryption
 
 - [x] SBox
-- [ ] SubBytes
+- [x] SubBytes
 - [ ] ShiftRows
 - [ ] MixColumns
 
 ## Decryption
 
 - [x] InvSBox
-- [ ] InvSubBytes
+- [x] InvSubBytes
 - [ ] InvShiftRows
 - [ ] InvMixColumns
 
