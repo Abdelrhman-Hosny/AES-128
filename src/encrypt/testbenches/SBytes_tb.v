@@ -4,7 +4,7 @@ module SBytes_tb();
 reg [127:0] state_in;
 wire [127:0] state_out;
     
-SBytes dut(state_in, state_out);
+SBytes #(.NWords(4)) dut (state_in, state_out);
 
 initial begin
     $dumpfile("SBytes.vcd");
