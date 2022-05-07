@@ -7,7 +7,7 @@ wire [127:0] state_out;
 SBytes #(.NWords(4)) dut (state_in, state_out);
 
 initial begin
-    $dumpfile("SBytes.vcd");
+    $dumpfile("SBytes_tb.vcd");
     $dumpvars(0, SBytes_tb);
  
 state_in = 128'h193de3bea0f4e22b9ac68d2ae9f84808;
