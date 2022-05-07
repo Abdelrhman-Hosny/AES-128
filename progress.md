@@ -3,21 +3,21 @@
 ## Encryption
 
 - [x] SBox
-- [ ] SubBytes
+- [x] SubBytes
 - [ ] ShiftRows
 - [ ] MixColumns
 
 ## Decryption
 
 - [x] InvSBox
-- [ ] InvSubBytes
+- [x] InvSubBytes
 - [ ] InvShiftRows
 - [ ] InvMixColumns
 
 ## Common
 
-- [ ] AddRoundKey // Not sure if common or not
-- [ ] KeyExpansion // Not sure if common or not
+- [x] AddRoundKey // Not sure if common or not
+- [x] KeyExpansion
 
 ## Integration
 
