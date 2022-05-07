@@ -16,8 +16,8 @@
 
 ## Common
 
-- [ ] AddRoundKey // Not sure if common or not
-- [ ] KeyExpansion // Not sure if common or not
+- [x] AddRoundKey // Not sure if common or not
+- [x] KeyExpansion
 
 ## Integration
 
