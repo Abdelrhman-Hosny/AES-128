@@ -1,4 +1,3 @@
-
 //Takes One Cycle
 module GFMulBy2(Clk, In, Out);
     input Clk;
