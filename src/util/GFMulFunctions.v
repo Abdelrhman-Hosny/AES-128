@@ -8,3 +8,15 @@ module GFMulBy2(Clk, In, Out);
                       {In[6:0] , 1'b0};
 endmodule 
 
+module GFMulBy3(Clk, In, Out);
+    input Clk;
+    input [7:0] In;
+    output [7:0] Out;
+
+    wire [7:0] MulBy2Out;
+    
+    GFMulBy2 tu(Clk, In, MulBy2Out);
+    assign Out = In ^ MulBy2Out;
+endmodule
+
+
