@@ -27,6 +27,7 @@ module MulColEnc(Clk, ColIn, ColOut);
 endmodule
 
 
+// Takes Only One Cycle To Produce Valid Output 
 module MixColEnc(Clk, DataIn, DataOut);
     input Clk;
     input [127:0] DataIn;
