@@ -9,12 +9,27 @@ module KeyExpansion
                    output reg [ Nr * Nk * 32 - 1:0] keyOut);
 
 // random constant definition
-reg [0:319] rcon = 320'h01_00_00_00_02_00_00_0004_00_00_0008_00_00_0010_00_00_0020_00_00_0040_00_00_0080_00_00_001b_00_00_0036_00_00_00;
+wire [0:319] rcon;
+generate
+    if (Nk == 4)
+        assign rcon = 320'h01_00_00_00_02_00_00_00_04_00_00_00_08_00_00_00_10_00_00_00_20_00_00_00_40_00_00_00_80_00_00_00_1b_00_00_00_36_00_00_00;
+    else if (Nk == 6)
+        assign rcon[0: 255] = 256'h01_00_00_00_02_00_00_0004_00_00_0008_00_00_0010_00_00_0020_00_00_0040_00_00_0080_00_00_00;
 
-wire [31:0] words [0: Nb * (Nr + 1) - 1];
-wire [31:0] temp[0:9];
-genvar i, rNum, j, k, inKey;
+    else if (Nk == 8)
+        assign rcon[0: 223] = 224'h01_00_00_00_02_00_00_00_04_00_00_00_08_00_00_00_10_00_00_00_20_00_00_00_40_00_00_00;
 
+endgenerate
+
+wire [31:0] words [0: Nk * (Nr + 1) - 1];
+wire [31:0] temp[0:Nr - 1];
+genvar i, rNum, j, k, inKey, t2_gen;
+
+generate
+if ( Nk == 8) begin
+    wire [31:0] temp2[0:6];
+end
+endgenerate
 
 
 // assign input key to words 0 -> Nk - 1
@@ -31,12 +46,39 @@ generate
     end
 endgenerate
 
-// generate the words
 generate
-    for (j = Nk; j < Nk * (Nr + 1); j = j + 1) begin
-        assign words[j] = (j % 4 == 0) ? words[j - 4] ^ rcon[(j/4 - 1) * 32: (j/4 - 1) * 32 + 31] ^ temp[(j - 4)/4]: words[j - 4] ^ words[j - 1] ;
+    if (Nk == 8) begin
+    for (t2_gen = 4; t2_gen < 53; t2_gen = t2_gen + 8) begin
+        SBytes #(.NWords(1)) SBytes_block(words[t2_gen - 1], temp2[t2_gen/8]);
+    end
     end
 endgenerate
+
+// generate the words
+generate
+    for (j = Nk; j < Nb * (Nr + 1); j = j + 1) begin
+
+            if (j % Nk == 0)
+
+                assign words[j] = words[j - Nk] ^  rcon[(j/Nk - 1) * 32: (j/Nk - 1) * 32 + 31] ^ temp[(j - Nk)/Nk];
+                        
+            else if (Nk > 6 && j % Nk == 4)
+                assign words[j] = words[j - Nk] ^ temp2[j];
+
+            else
+                assign words[j] = words[j - Nk] ^ words[j - 1];
+            
+        end
+
+endgenerate
+
+// generate
+//     for (j = Nk; j < Nb * (Nr + 1); j = j + 1) begin
+//         assign words[j] = (j % Nk == 0) ? words[j - 4] ^ rcon[(j/4 - 1) * 32: (j/4 - 1) * 32 + 31] ^ temp[(j - 4)/4]: words[j - 4] ^ words[j - 1] ;
+//     end
+// endgenerate
+
+
 
 // at each clock, output all keys
 // key1 = keyOut[Nk * keyWidth - 1: 0]
