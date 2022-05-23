@@ -25,14 +25,12 @@ wire [31:0] words [0: Nk * (Nr + 1) - 1];
 wire [31:0] temp[0:Nr - 1];
 genvar i, rNum, j, k, inKey, t2_gen;
 
-generate
-if ( Nk == 8) begin
-    wire [31:0] temp2[0:6];
-end
-endgenerate
+    wire [31:0] temp2[0:5];
+
 
 
 // assign input key to words 0 -> Nk - 1
+// works
 generate
     for (i = 0; i < Nk; i = i + 1) begin
         assign words[i] = keyIn[(Nk - 1 - i)*32 + 31:(Nk - 1 -i)*32];
@@ -42,14 +40,14 @@ endgenerate
 // set the temp for each time j % 4 == 0 
 generate
     for (rNum = 1; rNum < (Nr + 1); rNum = rNum + 1) begin
-        SBytes #(.NWords(1)) SBytes_block({words[rNum * 4 - 1][23:0],words[rNum * 4 - 1][31:24]}, temp[rNum - 1]);
+        SBytes #(.NWords(1)) SBytes_block({words[rNum * Nk - 1][23:0],words[rNum * Nk - 1][31:24]}, temp[rNum - 1]);
     end
 endgenerate
 
 generate
     if (Nk == 8) begin
-    for (t2_gen = 4; t2_gen < 53; t2_gen = t2_gen + 8) begin
-        SBytes #(.NWords(1)) SBytes_block(words[t2_gen - 1], temp2[t2_gen/8]);
+    for (t2_gen = 12; t2_gen < 53; t2_gen = t2_gen + 8) begin
+        SBytes #(.NWords(1)) SBytes_block(words[t2_gen - 1], temp2[t2_gen/8 - 1]);
     end
     end
 endgenerate
@@ -63,7 +61,7 @@ generate
                 assign words[j] = words[j - Nk] ^  rcon[(j/Nk - 1) * 32: (j/Nk - 1) * 32 + 31] ^ temp[(j - Nk)/Nk];
                         
             else if (Nk > 6 && j % Nk == 4)
-                assign words[j] = words[j - Nk] ^ temp2[j];
+                assign words[j] = words[j - Nk] ^ temp2[j/Nk - 1];
 
             else
                 assign words[j] = words[j - Nk] ^ words[j - 1];
