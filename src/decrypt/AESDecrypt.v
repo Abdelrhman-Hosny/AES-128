@@ -1,8 +1,8 @@
-`include "../InvShiftRows.v"
-`include "../../encrypt/KeyExpansion.v"
-`include "../../encrypt/AddRoundKey.v"
-`include "../InvMixCol.v"
-`include "../InvSBytes.v"
+// `include "../InvShiftRows.v"
+// `include "../../encrypt/KeyExpansion.v"
+// `include "../../encrypt/AddRoundKey.v"
+// `include "../InvMixCol.v"
+// `include "../InvSBytes.v"
 
 
 module AESDecrypt
@@ -15,7 +15,7 @@ module AESDecrypt
     output [127:0] dataOut);
  
     genvar i;
-
+    
     wire [127:0] state [0: Nr - 1];
     wire [127:0] outSBytes [0:Nr - 1];
     wire [127:0] outShiftRows [0:Nr - 1];
@@ -29,14 +29,13 @@ module AESDecrypt
         outMixCol[Nr - 1]
     );
 
-
-    for (i = Nr - 1; i > 0; i = i - 1) begin
+    generate
+    for (i = Nr - 1; i > 0; i = i - 1) begin : decryptlabel1
         InvShiftRows invShiftRows (
             outMixCol[i],
-            outShiftRows[i]
-        );
+            outShiftRows[i]);
 
-        InvSBytes invSBytes (
+        InvSBytes invSBytes (clk,
             outShiftRows[i],
             outSBytes[i]);
 
@@ -52,18 +51,18 @@ module AESDecrypt
             outMixCol[i - 1]
         );
     end
-
-    InvShiftRows invShiftRows (
+    endgenerate
+    InvShiftRows finalInvShiftRows (
         outMixCol[0],
         outShiftRows[0]
     );
 
-    InvSBytes finalInvSBytes (
+    InvSBytes finalInvSBytes (clk,
         outShiftRows[0],
         outSBytes[0]
     );
 
-    AddRoundKey addRoundKey (
+    AddRoundKey finalAddRoundKey (
         outSBytes[0],
         keysOut[0: 127],
         dataOut

@@ -1,5 +1,5 @@
-module InvSBox(input [7:0] input_byte, output reg[7:0] output_byte);
-always @(input_byte) begin
+module InvSBox(input clk,input [7:0] input_byte, output reg[7:0] output_byte);
+always @(posedge clk) begin
 case(input_byte)
 8'h63: output_byte = 8'h00;
 8'h7c: output_byte = 8'h01;

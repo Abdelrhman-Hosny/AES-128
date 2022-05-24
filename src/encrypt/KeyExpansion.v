@@ -2,7 +2,7 @@
 // use when testing encrypt
 // `include "../SBytes.v"
 // use when testing decrypt
-`include "../../encrypt/SBytes.v"
+// `include "../../encrypt/SBytes.v"
 
 module KeyExpansion
         # (parameter Nk = 4,
@@ -36,29 +36,29 @@ genvar i, rNum, j, k, inKey, t2_gen;
 // assign input key to words 0 -> Nk - 1
 // works
 generate
-    for (i = 0; i < Nk; i = i + 1) begin
+    for (i = 0; i < Nk; i = i + 1) begin : KElapel1
         assign words[i] = keyIn[(Nk - 1 - i)*32 + 31:(Nk - 1 -i)*32];
     end
 endgenerate
 
 // set the temp for each time j % 4 == 0 
 generate
-    for (rNum = 1; rNum < (Nr + 1); rNum = rNum + 1) begin
-        SBytes #(.NWords(1)) SBytes_block({words[rNum * Nk - 1][23:0],words[rNum * Nk - 1][31:24]}, temp[rNum - 1]);
+    for (rNum = 1; rNum < (Nr + 1); rNum = rNum + 1) begin : KElapel2
+        SBytes #(.NWords(1)) SBytes_block(clk,{words[rNum * Nk - 1][23:0],words[rNum * Nk - 1][31:24]}, temp[rNum - 1]);
     end
 endgenerate
 
 generate
     if (Nk == 8) begin
-    for (t2_gen = 12; t2_gen < 53; t2_gen = t2_gen + 8) begin
-        SBytes #(.NWords(1)) SBytes_block(words[t2_gen - 1], temp2[t2_gen/8 - 1]);
+    for (t2_gen = 12; t2_gen < 53; t2_gen = t2_gen + 8) begin : KElapel3
+        SBytes #(.NWords(1)) SBytes_block(clk,words[t2_gen - 1], temp2[t2_gen/8 - 1]);
     end
     end
 endgenerate
 
 // generate the words
 generate
-    for (j = Nk; j < Nb * (Nr + 1); j = j + 1) begin
+    for (j = Nk; j < Nb * (Nr + 1); j = j + 1) begin : KElabel4
 
             if (j % Nk == 0)
 
@@ -90,8 +90,8 @@ always @(posedge clk) begin
     keyOut[0: Nk * 32 - 1] = keyIn;
 end
 generate
-    for (k = 0; k < Nr; k = k + 1) begin
-        for (inKey = 0; inKey < Nk; inKey = inKey + 1) begin
+    for (k = 0; k < Nr; k = k + 1) begin : KElabel5
+        for (inKey = 0; inKey < Nk; inKey = inKey + 1) begin : KElabel6
             always @(posedge clk ) begin
                 keyOut[ (k + 1) * Nk * 32 + (inKey) * 32:
                         (k + 1) * Nk * 32 + (inKey + 1) * 32 - 1] = words[k * Nk + inKey + Nk];
