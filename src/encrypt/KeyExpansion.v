@@ -1,4 +1,8 @@
-`include "../SBytes.v"
+// move to proper position instead of doing this
+// use when testing encrypt
+// `include "../SBytes.v"
+// use when testing decrypt
+`include "../../encrypt/SBytes.v"
 
 module KeyExpansion
         # (parameter Nk = 4,
