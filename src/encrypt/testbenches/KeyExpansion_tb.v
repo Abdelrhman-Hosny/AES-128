@@ -6,10 +6,10 @@ reg [127:0] key128;
 wire [0:1279 + 128] fullKeys128;
 
 reg [191:0] key192;
-wire [0:2303 + 192] fullKeys192;
+wire [0:1663] fullKeys192;
 
 reg [255:0] key256;
-wire [3583 + 256:0] fullKeys256;
+wire [0:1919] fullKeys256;
 
 reg clk;
 integer i;
@@ -55,8 +55,8 @@ $display("Full keys\n%h", fullKeys192);
 $display("256 bit keys\n");
 
 $display("words: %h %h %h %h %h %h\n", uut3.words[8], uut3.words[9], uut3.words[10], uut3.words[11], uut3.words[12], uut3.words[13]);
-$display("Key 1 : %h", fullKeys256[ 255: 0]);
-$display("Key 2 : %h", fullKeys256[ 256 * 2 - 1: 256]);
+$display("Key 1 : %h", fullKeys256[ 0: 255]);
+$display("Key 2 : %h", fullKeys256[ 256 : 256 * 2 - 1]);
 #200 $finish;
 end
 

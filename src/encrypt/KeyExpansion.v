@@ -6,7 +6,7 @@ module KeyExpansion
             parameter Nb = 4
             )
             (input [Nk * 32 - 1:0] keyIn, input clk,
-                   output reg [0: (Nr + 1) * Nk * 32 - 1] keyOut);
+                   output reg [0: (Nr + 1) * Nb * 32 - 1] keyOut);
 
 // random constant definition
 wire [0:319] rcon;
