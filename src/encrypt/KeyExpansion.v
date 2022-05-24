@@ -6,7 +6,7 @@ module KeyExpansion
             parameter Nb = 4
             )
             (input [Nk * 32 - 1:0] keyIn, input clk,
-                   output reg [ Nr * Nk * 32 - 1:0] keyOut);
+                   output reg [0: (Nr + 1) * Nk * 32 - 1] keyOut);
 
 // random constant definition
 wire [0:319] rcon;
@@ -82,12 +82,15 @@ endgenerate
 // key1 = keyOut[Nk * keyWidth - 1: 0]
 
 // key2 = keyOut[2 * Nk * keyWidth - 1: Nk * keyWidth]
+always @(posedge clk) begin
+    keyOut[0: Nk * 32 - 1] = keyIn;
+end
 generate
     for (k = 0; k < Nr; k = k + 1) begin
         for (inKey = 0; inKey < Nk; inKey = inKey + 1) begin
             always @(posedge clk ) begin
-                keyOut[ k * Nk * 32 + (inKey + 1) * 32 - 1:
-                        k * Nk * 32 + (inKey) * 32] = words[k * Nk + (Nk - 1 - inKey) + Nk];
+                keyOut[ (k + 1) * Nk * 32 + (inKey) * 32:
+                        (k + 1) * Nk * 32 + (inKey + 1) * 32 - 1] = words[k * Nk + inKey + Nk];
             end
         end
     end
