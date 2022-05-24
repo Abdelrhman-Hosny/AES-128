@@ -17,9 +17,9 @@ module AES
     wire [127:0] outSBytes [0:Nr];
     wire [127:0] outShiftRows [0:Nr];
     wire [127:0] outMixCol [0:Nr];
-    wire [ Nr * Nk * 32 - 1:0] keysOut;
+    wire [0 :(Nr + 1) * Nk * 32 - 1] keysOut;
 
-    AddRoundKey addRoundKey(dataIn, keyIn, state[0]);
+    AddRoundKey addRoundKey(dataIn, keysOut[0:127], state[0]);
 
     KeyExpansion #(.Nk(Nk), .Nr(Nr)) keyExpansion(keyIn, clk, keysOut);
     generate
@@ -29,13 +29,13 @@ module AES
             SBytes #(.NWords(4)) sBytes (state[i], outSBytes[i]);
             ShiftRows shiftRows(outSBytes[i], outShiftRows[i]);
             MixColEnc mixCol(clk, outShiftRows[i], outMixCol[i]);
-            AddRoundKey addRoundKey(outMixCol[i], keysOut[i * (Nk * 32) + (Nk * 32) - 1: i * (Nk * 32)], state[i + 1]);
+            AddRoundKey addRoundKey(outMixCol[i], keysOut[(i + 1) * 128: (i + 1) * 128 + 127], state[i + 1]);
         end
     endgenerate
 
     SBytes #(.NWords(4)) finalSBytes (state[Nr - 1], outSBytes[Nr]);
     ShiftRows finalShiftRows(outSBytes[Nr], outShiftRows[Nr]);
-    AddRoundKey finalAddRoundKey(outShiftRows[Nr],keysOut[(Nr - 1) * (Nk * 32) + (Nk * 32) - 1: (Nr - 1) * (Nk * 32)], dataOut);
+    AddRoundKey finalAddRoundKey(outShiftRows[Nr],keysOut[(Nr) * 128: (Nr) * 128 + 127], dataOut);
 
 
 endmodule
