@@ -7,7 +7,8 @@
 module AES
     #(
         parameter Nk=4,
-        parameter Nr=10
+        parameter Nr=10,
+        parameter Nb=4
     )
     (input [127:0] dataIn, input [Nk * 32 - 1:0] keyIn, input clk,
     output [127:0] dataOut);
@@ -17,7 +18,7 @@ module AES
     wire [127:0] outSBytes [0:Nr];
     wire [127:0] outShiftRows [0:Nr];
     wire [127:0] outMixCol [0:Nr];
-    wire [0 :(Nr + 1) * Nk * 32 - 1] keysOut;
+    wire [0 :(Nr + 1) * Nb * 32 - 1] keysOut;
 
     AddRoundKey addRoundKey(dataIn, keysOut[0:127], state[0]);
 
