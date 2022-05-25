@@ -1,4 +1,5 @@
-`include "../../util/GFMulFunctions.v"
+// `include "../../util/GFMulFunctions.v"
+`include "/home/hos/Eng/logic2/project/AES-128/src/util/GFMulFunctions.v"
 
 module MulColEnc(Clk, ColIn, ColOut);
     input Clk;

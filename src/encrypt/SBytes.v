@@ -1,6 +1,8 @@
 // `include "../SBox.v"
 // TODO: refactor files to make them work for both cases
 // `include "../../encrypt/SBox.v"
+`include "/home/hos/Eng/logic2/project/AES-128/src/encrypt/SBox.v"
+
 module SBytes
  # (parameter NWords = 4)
  (input clk,input [NWords * 32 - 1:0] bytes_in, output [NWords * 32 - 1:0] bytes_out);

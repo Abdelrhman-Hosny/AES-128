@@ -1,5 +1,7 @@
 // `include "../InvSBox.v"
 
+`include "/home/hos/Eng/logic2/project/AES-128/src/decrypt/InvSBox.v"
+
 module InvSBytes
     # (parameter NWords = 4)
     (input clk,input [NWords * 32 - 1:0] bytes_in, output [NWords * 32 - 1:0] bytes_out);

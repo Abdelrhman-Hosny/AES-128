@@ -2,7 +2,11 @@
 // `include "../KeyExpansion.v"
 // `include "../ShiftRows.v"
 // `include "../MixCol.v"
-// `include "../SBytes.v"
+// `include "/home/hos/Eng/logic2/project/AES-128/src/encrypt/KeyExpansion.v"
+// `include "/home/hos/Eng/logic2/project/AES-128/src/encrypt/AddRoundKey.v"
+`include "/home/hos/Eng/logic2/project/AES-128/src/encrypt/ShiftRows.v"
+`include "/home/hos/Eng/logic2/project/AES-128/src/encrypt/MixCol.v"
+
 
 module AES
     #(

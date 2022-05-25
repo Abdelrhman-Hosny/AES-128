@@ -4,6 +4,7 @@
 // use when testing decrypt
 // `include "../../encrypt/SBytes.v"
 
+`include "/home/hos/Eng/logic2/project/AES-128/src/encrypt/SBytes.v"
 module KeyExpansion
         # (parameter Nk = 4,
             parameter Nr = 10,
